@@ -147,12 +147,12 @@
       font-size: 14px;
       width: 100%;
       box-sizing: border-box;
-      margin-top: 18px;  /* чтобы не наезжало на номер */
+      margin-top: 18px;
     }
     .cell input[type="number"] {
       padding: 3px 5px;
       font-size: 14px;
-      margin-top: 18px;  /* чтобы поле было ниже номера */
+      margin-top: 18px;
     }
 
     /* Цвет фона 1–3 (персиковый) */
@@ -170,10 +170,51 @@
       border-color: #d4e4ff;
     }
 
-    /* Для подписи "(промежуточное число)" делаем шрифт мягче */
-    .group-intermediate .group-header {
+    /* Для подписи "(промежуточное число)" */
+    .group-intermediate .group-title-inline {
+      text-align: center;
+      font-size: 12px;
       color: #6b7280;
       font-style: italic;
+      margin-bottom: 2px;
+    }
+
+    /* Блок интерпретации пар */
+    .divider {
+      margin: 14px 0 10px;
+      border: none;
+      border-top: 1px solid #e5e7eb;
+    }
+    .pair-descriptions {
+      margin-top: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .pair-item {
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+    .pair-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+      font-size: 13px;
+      color: #374151;
+    }
+    .pair-title {
+      font-weight: 600;
+    }
+    .pair-values {
+      font-size: 13px;
+      color: #4b5563;
+    }
+    .pair-text {
+      font-size: 12px;
+      color: #6b7280;
     }
 
     @media (max-width: 480px) {
@@ -276,7 +317,6 @@
         <span class="group-roman">III.</span>
         <span class="group-title">Намерение, мотивация к действию.</span>
       </div>
-      <!-- 9 под 5-й ячейкой (первая колонка) -->
       <div class="row">
         <div class="cell cell-9">
           <div class="cell-number">9</div>
@@ -289,27 +329,20 @@
     </div>
 
     <!-- (промежуточное число) над 11-й -->
-<div class="group group-intermediate">
-  <div style="display: grid; grid-template-columns: repeat(4, 1fr); margin-bottom: 2px;">
-    <div></div>
-    <div></div>
-    <div style="text-align: center; font-size: 12px; color: #6b7280; font-style: italic;">
-      (промежуточное число)
+    <div class="group group-intermediate">
+      <div class="group-title-inline">
+        (промежуточное число)
+      </div>
+      <div class="row">
+        <div class="cell empty"></div>
+        <div class="cell empty"></div>
+        <div class="cell cell-11">
+          <div class="cell-number">11</div>
+          <div class="cell-value readonly-box" id="num11">0</div>
+        </div>
+        <div class="cell empty"></div>
+      </div>
     </div>
-    <div></div>
-  </div>
-
-  <div class="row">
-    <div class="cell empty"></div>
-    <div class="cell empty"></div>
-    <div class="cell cell-11">
-      <div class="cell-number">11</div>
-      <div class="cell-value readonly-box" id="num11">0</div>
-    </div>
-    <div class="cell empty"></div>
-  </div>
-</div>
-
 
     <!-- IV. 10 -->
     <div class="group">
@@ -317,7 +350,6 @@
         <span class="group-roman">IV.</span>
         <span class="group-title">Способ действия (социальное проявление).</span>
       </div>
-      <!-- 10 под 5-й (первая колонка) -->
       <div class="row">
         <div class="cell cell-10">
           <div class="cell-number">10</div>
@@ -335,7 +367,6 @@
         <span class="group-roman">V.</span>
         <span class="group-title">Проявление (Точка выхода).</span>
       </div>
-      <!-- 12 под 5-й (первая колонка) -->
       <div class="row">
         <div class="cell cell-12">
           <div class="cell-number">12</div>
@@ -352,6 +383,36 @@
     <p class="note">
       Внутри заданы те же формулы, что и в исходном Excel-файле. Пользователю показываются только номера и значения.
     </p>
+
+    <!-- ИНТЕРПРЕТАЦИЯ ПАР -->
+    <hr class="divider">
+    <h2>Интерпретация пар</h2>
+    <p class="note">
+      Ниже — интерпретация пар 5–6 и 7–8. Порядок чисел в паре не имеет значения (13–9 = 9–13).
+    </p>
+
+    <div class="pair-descriptions">
+      <div class="pair-item">
+        <div class="pair-header">
+          <span class="pair-title">Пара 5–6</span>
+          <span class="pair-values" id="pair56Values">—</span>
+        </div>
+        <div class="pair-text" id="pair56Text">
+          Здесь появится описание, если пара чисел соответствует заданным комбинациям.
+        </div>
+      </div>
+
+      <div class="pair-item">
+        <div class="pair-header">
+          <span class="pair-title">Пара 7–8</span>
+          <span class="pair-values" id="pair78Values">—</span>
+        </div>
+        <div class="pair-text" id="pair78Text">
+          Здесь появится описание, если пара чисел соответствует заданным комбинациям.
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -374,6 +435,61 @@
     function toNumber(value) {
       const n = Number(value);
       return isNaN(n) ? 0 : n;
+    }
+
+    // Список пар и их описаний (порядок в паре не важен)
+    const pairMeanings = [
+      { pair: [1, 21], text: "Мастер учиться обучая." },
+      { pair: [2, 20], text: "Управлять. Понимать закон, создавать свои законы для управления." },
+      { pair: [3, 19], text: "Обеспеченный любовью – обеспечен всем (любовь в приоритете)." },
+      { pair: [4, 18], text: "Знать, чтобы быть за пределами родового давления." },
+      { pair: [5, 17], text: "Управлять, помня о себе. Аспект психофизического здоровья." },
+      { pair: [6, 16], text: "Вовремя расстаться с накопившимся опытом, чтобы получить возможность приобрести." },
+      { pair: [7, 15], text: "Всему своё время, и оно ограничено." },
+      { pair: [8, 14], text: "Исполнительность – лучший инструмент для продвижения себя." },
+      { pair: [9, 13], text: "Знать, чтобы влиять, применять, изменять и понимать, зачем. Аспект влияния и трансформации." },
+      { pair: [10, 12], text: "Реализация в радость от постижения сути и результата помощи. Аспект пространственного права и отклика на помощь." },
+      { pair: [11, 11], text: "Важно научиться стремиться к самостоятельности. Всякая неуместная помощь категорически запрещена либо является психологической, культурной и духовной смертью для человека." },
+      { pair: [0, 0], text: "Аспект личностного противостояния. Развлекать, объяснять смысл жизни, призывать радоваться жизни других людей, которым это не надо, – запрещено. Уделять время себе." }
+    ];
+
+    function findPairMeaning(a, b) {
+      const x = Number(a);
+      const y = Number(b);
+      const sorted = [x, y].sort((m, n) => m - n);
+
+      for (const item of pairMeanings) {
+        const p = [...item.pair].sort((m, n) => m - n);
+        if (p[0] === sorted[0] && p[1] === sorted[1]) {
+          return item.text;
+        }
+      }
+      return null;
+    }
+
+    function updatePairs(a5, b5, c5, d5) {
+      const pair56ValuesElem = document.getElementById('pair56Values');
+      const pair56TextElem = document.getElementById('pair56Text');
+      const pair78ValuesElem = document.getElementById('pair78Values');
+      const pair78TextElem = document.getElementById('pair78Text');
+
+      // Пара 5–6
+      pair56ValuesElem.textContent = `${a5} и ${b5}`;
+      const meaning56 = findPairMeaning(a5, b5);
+      if (meaning56) {
+        pair56TextElem.textContent = meaning56;
+      } else {
+        pair56TextElem.textContent = "Для этой пары пока нет заданного описания. Трактуется индивидуально.";
+      }
+
+      // Пара 7–8
+      pair78ValuesElem.textContent = `${c5} и ${d5}`;
+      const meaning78 = findPairMeaning(c5, d5);
+      if (meaning78) {
+        pair78TextElem.textContent = meaning78;
+      } else {
+        pair78TextElem.textContent = "Для этой пары пока нет заданного описания. Трактуется индивидуально.";
+      }
     }
 
     function recalc() {
@@ -429,6 +545,9 @@
       document.getElementById('num10').textContent = a9;   // 10 = A9
       document.getElementById('num11').textContent = e8;   // 11 = E8
       document.getElementById('num12').textContent = a11;  // 12 = A11
+
+      // Обновляем интерпретации пар 5–6 и 7–8
+      updatePairs(a5, b5, c5, d5);
     }
 
     function clearInputs() {
