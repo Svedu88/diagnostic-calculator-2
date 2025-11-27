@@ -1,2 +1,438 @@
-<h1>Проверка GitHub Pages</h1>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Диагностическая диаграмма</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 12px;
+      background: #f5f5f5;
+    }
+    h1, h2 {
+      text-align: center;
+      margin: 8px 0;
+    }
+    .card {
+      background: #ffffff;
+      padding: 14px;
+      border-radius: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+      margin-bottom: 14px;
+    }
+    .note {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 6px;
+    }
+    input[type="password"],
+    input[type="number"] {
+      width: 100%;
+      padding: 4px 6px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      margin-top: 2px;
+      font-size: 14px;
+    }
+    button {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    button.primary {
+      background: #2563eb;
+      color: white;
+    }
+    button.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+    .error {
+      color: #b91c1c;
+      margin-top: 6px;
+      min-height: 1.2em;
+      font-size: 12px;
+    }
 
+    /* ГРУППЫ (строки с римскими цифрами) */
+    .group {
+      margin-top: 10px;
+    }
+    .group-header {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      font-size: 13px;
+      color: #4b5563;
+      margin-bottom: 4px;
+    }
+    .group-roman {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .group-title {
+      font-size: 13px;
+    }
+
+    /* Общий стиль "строки" с 4 колонками */
+    .row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(56px, 1fr));
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .cell {
+      border-radius: 8px;
+      padding: 10px 6px 8px 6px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      text-align: center;
+      min-height: 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .cell.empty {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+
+    /* Номер ячейки (1..12) – маленький, справа сверху */
+    .cell-number {
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      font-weight: 500;
+      font-size: 10px;
+      color: #9ca3af;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Номера 1–3 – нежный персиковый */
+    .cell-1 .cell-number,
+    .cell-2 .cell-number,
+    .cell-3 .cell-number {
+      color: #f59e7b;
+    }
+
+    /* Номера 4 и 11 – мягкий голубой */
+    .cell-4 .cell-number,
+    .cell-11 .cell-number {
+      color: #60a5fa;
+    }
+
+    .cell-value {
+      font-size: 14px;
+      min-height: 1.2em;
+    }
+    .readonly-box {
+      padding: 3px 5px;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      background: #f3f4f6;
+      font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 18px;  /* чтобы не наезжало на номер */
+    }
+    .cell input[type="number"] {
+      padding: 3px 5px;
+      font-size: 14px;
+      margin-top: 18px;  /* чтобы поле было ниже номера */
+    }
+
+    /* Цвет фона 1–3 (персиковый) */
+    .cell-1,
+    .cell-2,
+    .cell-3 {
+      background: #fff4ec;
+      border-color: #ffe3d1;
+    }
+
+    /* Цвет фона 4 и 11 (голубой) */
+    .cell-4,
+    .cell-11 {
+      background: #e7f1ff;
+      border-color: #d4e4ff;
+    }
+
+    /* Для подписи "(промежуточное число)" делаем шрифт мягче */
+    .group-intermediate .group-header {
+      color: #6b7280;
+      font-style: italic;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 8px;
+      }
+      .card {
+        padding: 10px;
+      }
+      .cell {
+        min-height: 52px;
+      }
+      .readonly-box {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ПАРОЛЬ -->
+  <div id="login" class="card">
+    <h2>Доступ к калькулятору</h2>
+    <p>Введите пароль, чтобы открыть диагностическую диаграмму.</p>
+    <label>
+      Пароль:
+      <input type="password" id="passwordInput" autocomplete="off">
+    </label>
+    <button class="primary" onclick="checkPassword()">Войти</button>
+    <p id="error" class="error"></p>
+    <p class="note">
+      Пароль: <b>1234</b>. Это простая защита от случайных людей, не от специалистов.
+    </p>
+  </div>
+
+  <!-- КАЛЬКУЛЯТОР -->
+  <div id="app" class="card" style="display:none;">
+    <h1>Диагностическая диаграмма</h1>
+
+    <h2>Входные значения</h2>
+    <p class="note">
+      Числа <b>1, 2, 3</b> — вводимые значения. Остальные позиции (4–12) считаются автоматически по тем же формулам, что и в Excel.
+    </p>
+
+    <!-- I. 1–4 -->
+    <div class="group">
+      <div class="group-header">
+        <span class="group-roman">I.</span>
+        <span class="group-title">Точка входа. Три фазы жизни, метациклы.</span>
+      </div>
+      <div class="row">
+        <div class="cell cell-1">
+          <div class="cell-number">1</div>
+          <input type="number" id="a3" oninput="recalc()">
+        </div>
+        <div class="cell cell-2">
+          <div class="cell-number">2</div>
+          <input type="number" id="b3" oninput="recalc()">
+        </div>
+        <div class="cell cell-3">
+          <div class="cell-number">3</div>
+          <input type="number" id="c3" oninput="recalc()">
+        </div>
+        <div class="cell cell-4">
+          <div class="cell-number">4</div>
+          <div class="cell-value readonly-box" id="num4">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- II. 5–8 -->
+    <div class="group">
+      <div class="group-header">
+        <span class="group-roman">II.</span>
+        <span class="group-title">Проявление в социальной сфере.</span>
+      </div>
+      <div class="row">
+        <div class="cell cell-5">
+          <div class="cell-number">5</div>
+          <div class="cell-value readonly-box" id="num5">0</div>
+        </div>
+        <div class="cell cell-6">
+          <div class="cell-number">6</div>
+          <div class="cell-value readonly-box" id="num6">0</div>
+        </div>
+        <div class="cell cell-7">
+          <div class="cell-number">7</div>
+          <div class="cell-value readonly-box" id="num7">0</div>
+        </div>
+        <div class="cell cell-8">
+          <div class="cell-number">8</div>
+          <div class="cell-value readonly-box" id="num8">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- III. 9 -->
+    <div class="group">
+      <div class="group-header">
+        <span class="group-roman">III.</span>
+        <span class="group-title">Намерение, мотивация к действию.</span>
+      </div>
+      <!-- 9 под 5-й ячейкой (первая колонка) -->
+      <div class="row">
+        <div class="cell cell-9">
+          <div class="cell-number">9</div>
+          <div class="cell-value readonly-box" id="num9">0</div>
+        </div>
+        <div class="cell empty"></div>
+        <div class="cell empty"></div>
+        <div class="cell empty"></div>
+      </div>
+    </div>
+
+    <!-- (промежуточное число) 11 под 7-й, между 9 и 10 -->
+    <div class="group group-intermediate">
+      <div class="group-header">
+        <span class="group-title">(промежуточное число)</span>
+      </div>
+      <div class="row">
+        <div class="cell empty"></div>
+        <div class="cell empty"></div>
+        <div class="cell cell-11">
+          <div class="cell-number">11</div>
+          <div class="cell-value readonly-box" id="num11">0</div>
+        </div>
+        <div class="cell empty"></div>
+      </div>
+    </div>
+
+    <!-- IV. 10 -->
+    <div class="group">
+      <div class="group-header">
+        <span class="group-roman">IV.</span>
+        <span class="group-title">Способ действия (социальное проявление).</span>
+      </div>
+      <!-- 10 под 5-й (первая колонка) -->
+      <div class="row">
+        <div class="cell cell-10">
+          <div class="cell-number">10</div>
+          <div class="cell-value readonly-box" id="num10">0</div>
+        </div>
+        <div class="cell empty"></div>
+        <div class="cell empty"></div>
+        <div class="cell empty"></div>
+      </div>
+    </div>
+
+    <!-- V. 12 -->
+    <div class="group">
+      <div class="group-header">
+        <span class="group-roman">V.</span>
+        <span class="group-title">Проявление (Точка выхода).</span>
+      </div>
+      <!-- 12 под 5-й (первая колонка) -->
+      <div class="row">
+        <div class="cell cell-12">
+          <div class="cell-number">12</div>
+          <div class="cell-value readonly-box" id="num12">0</div>
+        </div>
+        <div class="cell empty"></div>
+        <div class="cell empty"></div>
+        <div class="cell empty"></div>
+      </div>
+    </div>
+
+    <button class="secondary" onclick="clearInputs()">Очистить всё</button>
+
+    <p class="note">
+      Внутри заданы те же формулы, что и в исходном Excel-файле. Пользователю показываются только номера и значения.
+    </p>
+  </div>
+
+  <script>
+    const PASSWORD = "1234";
+
+    function checkPassword() {
+      const input = document.getElementById('passwordInput').value.trim();
+      const errorElem = document.getElementById('error');
+
+      if (input === PASSWORD) {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        errorElem.textContent = "";
+        recalc();
+      } else {
+        errorElem.textContent = "Неверный пароль";
+      }
+    }
+
+    function toNumber(value) {
+      const n = Number(value);
+      return isNaN(n) ? 0 : n;
+    }
+
+    function recalc() {
+      const a3 = toNumber(document.getElementById('a3').value);
+      const b3 = toNumber(document.getElementById('b3').value);
+      const c3 = toNumber(document.getElementById('c3').value);
+
+      // --- формулы как в Excel ---
+
+      // D3 = IF(A3+B3+C3=0,0,MOD(A3+B3+C3-1,22)+1)
+      const sumABC = a3 + b3 + c3;
+      const d3 = (sumABC === 0) ? 0 : (((sumABC - 1) % 22) + 1);
+
+      // B5 = IF(A3+B3>=22,A3+B3-22,A3+B3)
+      const sumAB = a3 + b3;
+      const b5 = (sumAB >= 22) ? (sumAB - 22) : sumAB;
+
+      // C5 = IF(B3+C3>=22,B3+C3-22,B3+C3)
+      const sumBC = b3 + c3;
+      const c5 = (sumBC >= 22) ? (sumBC - 22) : sumBC;
+
+      // A5 = IF(22-B5>=22,22-B5-22,22-B5)
+      const tmpA5 = 22 - b5;
+      const a5 = (tmpA5 >= 22) ? (tmpA5 - 22) : tmpA5;
+
+      // D5 = IF(22-C5>=22,22-C5-22,22-C5)
+      const tmpD5 = 22 - c5;
+      const d5 = (tmpD5 >= 22) ? (tmpD5 - 22) : tmpD5;
+
+      // A7 = IF(B5+C5>22,B5+C5-22,B5+C5)
+      const sumB5C5 = b5 + c5;
+      const a7 = (sumB5C5 > 22) ? (sumB5C5 - 22) : sumB5C5;
+
+      // A9 = IF(ABS(B5-C5)+A7>22,ABS(B5-C5)+A7-22,ABS(B5-C5)+A7)
+      const tempA9 = Math.abs(b5 - c5) + a7;
+      const a9 = (tempA9 > 22) ? (tempA9 - 22) : tempA9;
+
+      // E8 = IF(A7+A9>22, A7+A9-22, A7+A9)
+      const sumA7A9 = a7 + a9;
+      const e8 = (sumA7A9 > 22) ? (sumA7A9 - 22) : sumA7A9;
+
+      // A11 = IF(A3+C3+A9=0,0,MOD(A3+C3+A9-1,22)+1)
+      const sumA3C3A9 = a3 + c3 + a9;
+      const a11 = (sumA3C3A9 === 0) ? 0 : (((sumA3C3A9 - 1) % 22) + 1);
+
+      // --- выводим в номера 4–12 ---
+      document.getElementById('num4').textContent  = d3;   // 4 = D3
+      document.getElementById('num5').textContent  = a5;   // 5 = A5
+      document.getElementById('num6').textContent  = b5;   // 6 = B5
+      document.getElementById('num7').textContent  = c5;   // 7 = C5
+      document.getElementById('num8').textContent  = d5;   // 8 = D5
+      document.getElementById('num9').textContent  = a7;   // 9 = A7
+      document.getElementById('num10').textContent = a9;   // 10 = A9
+      document.getElementById('num11').textContent = e8;   // 11 = E8
+      document.getElementById('num12').textContent = a11;  // 12 = A11
+    }
+
+    function clearInputs() {
+      document.getElementById('a3').value = "";
+      document.getElementById('b3').value = "";
+      document.getElementById('c3').value = "";
+      recalc();
+    }
+
+    document.addEventListener('DOMContentLoaded', recalc);
+  </script>
+
+</body>
+</html>
