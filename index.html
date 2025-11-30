@@ -61,7 +61,6 @@
       font-size: 12px;
     }
 
-    /* ГРУППЫ (строки с римскими цифрами) */
     .group {
       margin-top: 10px;
     }
@@ -81,7 +80,6 @@
       font-size: 13px;
     }
 
-    /* Общий стиль "строки" с 4 колонками */
     .row {
       display: grid;
       grid-template-columns: repeat(4, minmax(56px, 1fr));
@@ -110,7 +108,6 @@
       box-shadow: none;
     }
 
-    /* Номер ячейки (1..12) – маленький, справа сверху */
     .cell-number {
       position: absolute;
       top: 4px;
@@ -122,14 +119,12 @@
       padding: 0;
     }
 
-    /* Номера 1–3 – нежный персиковый */
     .cell-1 .cell-number,
     .cell-2 .cell-number,
     .cell-3 .cell-number {
       color: #f59e7b;
     }
 
-    /* Номера 4 и 11 – мягкий голубой */
     .cell-4 .cell-number,
     .cell-11 .cell-number {
       color: #60a5fa;
@@ -155,7 +150,6 @@
       margin-top: 18px;
     }
 
-    /* Цвет фона 1–3 (персиковый) */
     .cell-1,
     .cell-2,
     .cell-3 {
@@ -163,14 +157,12 @@
       border-color: #ffe3d1;
     }
 
-    /* Цвет фона 4 и 11 (голубой) */
     .cell-4,
     .cell-11 {
       background: #e7f1ff;
       border-color: #d4e4ff;
     }
 
-    /* Блок описаний (общий стиль) */
     .num-descriptions {
       margin-top: 4px;
       display: flex;
@@ -204,7 +196,6 @@
       white-space: pre-wrap;
     }
 
-    /* Блок интерпретации пар */
     .divider {
       margin: 14px 0 10px;
       border: none;
@@ -243,7 +234,6 @@
       white-space: pre-wrap;
     }
 
-    /* Подпись над 11-й ячейкой */
     .intermediate-label-row {
       margin-bottom: 2px;
     }
@@ -431,11 +421,11 @@
       Внутри заданы те же формулы, что и в исходном Excel-файле. Пользователю показываются только номера и значения.
     </p>
 
-    <!-- ОПИСАНИЕ I БЛОКА (1,2,3,11) -->
+    <!-- ОПИСАНИЕ I БЛОКА (1,2,3,4,11) -->
     <hr class="divider">
-    <h2>Описание I блока (1, 2, 3 и 11)</h2>
+    <h2>Описание I блока (1, 2, 3, 4 и 11)</h2>
     <p class="note">
-      Здесь выводится описание по значению в позициях 1, 2, 3 и промежуточном числе 11 (подкорковые зоны).
+      Здесь выводится описание по значению в позициях 1, 2, 3, точка входа 4 и уравновешивающее число 11 (подкорковые зоны).
     </p>
 
     <div class="num-descriptions">
@@ -461,11 +451,22 @@
 
       <div class="num-item">
         <div class="num-header">
-          <span class="num-title">Третий метацикл остальной период</span>
+          <span class="num-title">Третий метацикл — остальной период</span>
           <span class="num-value" id="num3Value">—</span>
         </div>
         <div class="num-text" id="num3Text">
           Введите данные выше, чтобы увидеть описание.
+        </div>
+      </div>
+
+      <!-- НОВОЕ: описание точки входа (4) ПЕРЕНЕСЕНО сюда -->
+      <div class="num-item">
+        <div class="num-header">
+          <span class="num-title">Точка входа (позиция 4)</span>
+          <span class="num-value" id="entry4Value">—</span>
+        </div>
+        <div class="num-text" id="entry4Text">
+          Введите данные выше, чтобы увидеть описание точки входа.
         </div>
       </div>
 
@@ -484,8 +485,7 @@
     <hr class="divider">
     <h2>Описание II блока (5–6, 7–8)</h2>
     <p class="note">
-      Ниже — интерпретация пар 5–6 и 7–8. Внешние проявления и мастерство женственности и мужественности, вместе с присущими им инструментами, образуют единый путь внутреннего и внешнего развития человека.
-      Порядок чисел в паре не имеет значения (13–9 = 9–13).
+      Ниже — интерпретация пар 5–6 и 7–8. Порядок чисел в паре не имеет значения (13–9 = 9–13).
     </p>
 
     <div class="pair-descriptions">
@@ -545,24 +545,14 @@
       </div>
     </div>
 
-    <!-- ОПИСАНИЕ V БЛОКА (4 и 12) -->
+    <!-- ОПИСАНИЕ V БЛОКА (ТОЛЬКО 12) -->
     <hr class="divider">
-    <h2>Описание V блока (4 и 12)</h2>
+    <h2>Описание V блока (12)</h2>
     <p class="note">
-      Часть 3. Проявление. Здесь точка входа (позиция 4) и точка выхода (позиция 12) показывают, как человек входит в опыт и как выходит, опираясь на свой собственный опыт.
+      Часть 3. Проявление. Позиция 12 показывает, как включается собственный опыт (точка выхода).
     </p>
 
     <div class="num-descriptions">
-      <div class="num-item">
-        <div class="num-header">
-          <span class="num-title">Позиция 4 — точка входа (включается в отсутствии опыта)</span>
-          <span class="num-value" id="entry4Value">—</span>
-        </div>
-        <div class="num-text" id="entry4Text">
-          Введите данные выше, чтобы увидеть описание точки входа.
-        </div>
-      </div>
-
       <div class="num-item">
         <div class="num-header">
           <span class="num-title">Позиция 12 — точка выхода (включается свой собственный опыт)</span>
@@ -704,7 +694,7 @@
       });
     }
 
-    /* Событийный треугольник III–IV (мотивация, действие, рекомендация) */
+    /* Событийный треугольник III–IV */
     const triangleDescriptions = {
       1: {
         motivation: `Стремление к познанию, экспериментам. Интерес к жизни, к любому набору опыта. Любознателен.`,
@@ -818,7 +808,6 @@
       }
     };
 
-    /* Точка входа / выхода (V блок) */
     const entryExitDescriptions = {
       1: {
         entry: "Остановиться. Вынужден прибегнуть к обучению.",
@@ -918,7 +907,6 @@
       const actElem  = document.getElementById('tri10Action');
       const advElem  = document.getElementById('tri10Advice');
 
-      // Позиция 9 — мотивация + рекомендация
       if (num9 === 0) {
         v9Elem.textContent   = "0";
         motElem.textContent  = "Значение отсутствует (0). Мотивация не проявлена.";
@@ -935,7 +923,6 @@
         }
       }
 
-      // Позиция 10 — способ действия и рекомендация
       if (num10 === 0) {
         v10Elem.textContent = "0";
         actElem.textContent = "Значение отсутствует (0). Способ действия не проявлен.";
@@ -954,12 +941,12 @@
     }
 
     function updateEntryExit(num4, num12) {
+      // точка входа 4 — теперь в блоке I
       const v4Elem  = document.getElementById('entry4Value');
       const text4   = document.getElementById('entry4Text');
       const v12Elem = document.getElementById('exit12Value');
       const text12  = document.getElementById('exit12Text');
 
-      // точка входа — позиция 4
       if (num4 === 0) {
         v4Elem.textContent = "0";
         text4.textContent  = "Значение отсутствует (0). Точка входа пока не проявлена.";
@@ -973,7 +960,6 @@
         }
       }
 
-      // точка выхода — позиция 12
       if (num12 === 0) {
         v12Elem.textContent = "0";
         text12.textContent  = "Значение отсутствует (0). Точка выхода пока не проявлена.";
@@ -988,7 +974,6 @@
       }
     }
 
-    /* Пары 5–6 и 7–8 */
     const pairMeanings = [
       { pair: [1, 21], text: "Мастер учиться обучая." },
       { pair: [2, 20], text: "Управлять. Понимать закон, создавать свои законы для управления." },
@@ -1024,12 +1009,10 @@
       const pair78ValuesElem = document.getElementById('pair78Values');
       const pair78TextElem   = document.getElementById('pair78Text');
 
-      // Пара 5–6
       pair56ValuesElem.textContent = `${a5} и ${b5}`;
       const meaning56 = findPairMeaning(a5, b5);
       pair56TextElem.textContent = meaning56 || "Для этой пары пока нет заданного описания. Трактуется индивидуально.";
 
-      // Пара 7–8
       pair78ValuesElem.textContent = `${c5} и ${d5}`;
       const meaning78 = findPairMeaning(c5, d5);
       pair78TextElem.textContent = meaning78 || "Для этой пары пока нет заданного описания. Трактуется индивидуально.";
@@ -1040,43 +1023,33 @@
       const b3 = toNumber(document.getElementById('b3').value);
       const c3 = toNumber(document.getElementById('c3').value);
 
-      // D3 = IF(A3+B3+C3=0,0,MOD(A3+B3+C3-1,22)+1)
       const sumABC = a3 + b3 + c3;
       const d3 = (sumABC === 0) ? 0 : (((sumABC - 1) % 22) + 1);
 
-      // B5 = IF(A3+B3>=22,A3+B3-22,A3+B3)
       const sumAB = a3 + b3;
       const b5 = (sumAB >= 22) ? (sumAB - 22) : sumAB;
 
-      // C5 = IF(B3+C3>=22,B3+C3-22,B3+C3)
       const sumBC = b3 + c3;
       const c5 = (sumBC >= 22) ? (sumBC - 22) : sumBC;
 
-      // A5 = IF(22-B5>=22,22-B5-22,22-B5)
       const tmpA5 = 22 - b5;
       const a5 = (tmpA5 >= 22) ? (tmpA5 - 22) : tmpA5;
 
-      // D5 = IF(22-C5>=22,22-C5-22,22-C5)
       const tmpD5 = 22 - c5;
       const d5 = (tmpD5 >= 22) ? (tmpD5 - 22) : tmpD5;
 
-      // A7 = IF(B5+C5>22,B5+C5-22,B5+C5)
       const sumB5C5 = b5 + c5;
       const a7 = (sumB5C5 > 22) ? (sumB5C5 - 22) : sumB5C5;
 
-      // A9 = IF(ABS(B5-C5)+A7>22,ABS(B5-C5)+A7-22,ABS(B5-C5)+A7)
       const tempA9 = Math.abs(b5 - c5) + a7;
       const a9 = (tempA9 > 22) ? (tempA9 - 22) : tempA9;
 
-      // E8 = IF(A7+A9>22, A7+A9-22, A7+A9)
       const sumA7A9 = a7 + a9;
       const e8 = (sumA7A9 > 22) ? (sumA7A9 - 22) : sumA7A9;
 
-      // A11 = IF(A3+C3+A9=0,0,MOD(A3+C3+A9-1,22)+1)
       const sumA3C3A9 = a3 + c3 + a9;
       const a11 = (sumA3C3A9 === 0) ? 0 : (((sumA3C3A9 - 1) % 22) + 1);
 
-      // Вывод значений 4–12
       document.getElementById('num4').textContent  = d3;
       document.getElementById('num5').textContent  = a5;
       document.getElementById('num6').textContent  = b5;
@@ -1087,16 +1060,9 @@
       document.getElementById('num11').textContent = e8;
       document.getElementById('num12').textContent = a11;
 
-      // Описания I блока
       updateNumberDescriptions(a3, b3, c3, e8);
-
-      // III–IV блок (9 и 10)
       updateTriangle(a7, a9);
-
-      // V блок (4 и 12)
       updateEntryExit(d3, a11);
-
-      // Пары 5–6 и 7–8
       updatePairs(a5, b5, c5, d5);
     }
 
