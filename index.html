@@ -170,15 +170,6 @@
       border-color: #d4e4ff;
     }
 
-    /* Для подписи "(промежуточное число)" */
-    .group-intermediate .group-title-inline {
-      text-align: center;
-      font-size: 12px;
-      color: #6b7280;
-      font-style: italic;
-      margin-bottom: 2px;
-    }
-
     /* Блок описаний (общий стиль) */
     .num-descriptions {
       margin-top: 4px;
@@ -250,6 +241,22 @@
       font-size: 12px;
       color: #6b7280;
       white-space: pre-wrap;
+    }
+
+    /* Подпись над 11-й ячейкой */
+    .intermediate-label-row {
+      margin-bottom: 2px;
+    }
+    .intermediate-label-row > div {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+    .intermediate-label {
+      font-size: 12px;
+      color: #6b7280;
+      font-style: italic;
+      text-align: center;
     }
 
     @media (max-width: 480px) {
@@ -364,9 +371,14 @@
     </div>
 
     <!-- (промежуточное число) над 11-й -->
-    <div class="group group-intermediate">
-      <div class="group-title-inline">
-        (промежуточное число)
+    <div class="group">
+      <div class="row intermediate-label-row">
+        <div></div>
+        <div></div>
+        <div>
+          <div class="intermediate-label">(промежуточное число)</div>
+        </div>
+        <div></div>
       </div>
       <div class="row">
         <div class="cell empty"></div>
@@ -508,11 +520,14 @@
     <div class="num-descriptions">
       <div class="num-item">
         <div class="num-header">
-          <span class="num-title">Позиция 9 — мотивация</span>
+          <span class="num-title">Позиция 9 — мотивация и рекомендация</span>
           <span class="num-value" id="tri9Value">—</span>
         </div>
         <div class="num-text" id="tri9Motivation">
           Введите данные выше, чтобы увидеть описание мотивации.
+        </div>
+        <div class="num-text" id="tri9Advice">
+          Здесь будет рекомендация (сфера реализации) для этого числа.
         </div>
       </div>
 
@@ -533,7 +548,7 @@
   </div>
 
   <script>
-    const PASSWORD = "Cal25_!"; // твой текущий пароль
+    const PASSWORD = "Cal25_!";
 
     function checkPassword() {
       const input = document.getElementById('passwordInput').value.trim();
@@ -554,7 +569,7 @@
       return isNaN(n) ? 0 : n;
     }
 
-    // ОПИСАНИЯ ДЛЯ ЧИСЕЛ 1–22 (ПОДКОРКОВЫЕ ЗОНЫ)
+    /* Подкорковые зоны 1–22 (для I блока) */
     const numberDescriptions = {
       1: `1 Подкорковая зона
 Обучение и исследования. Накопление опыта. Пользуются только тем, чему смогли научиться. Хорошо разбираются в пространстве. Свободолюбивы и одиноки. Задача – накопить всё, что смогут себе позволить накопить. Яркая, но всё же закрытая личность. Открыты к познанию, закрыты к общению.
@@ -660,7 +675,7 @@
       });
     }
 
-    // ОПИСАНИЯ ДЛЯ ЧИСЕЛ 1–22 (СОБЫТИЙНЫЙ ТРЕУГОЛЬНИК III–IV)
+    /* Событийный треугольник III–IV (мотивация, действие, рекомендация) */
     const triangleDescriptions = {
       1: {
         motivation: `Стремление к познанию, экспериментам. Интерес к жизни, к любому набору опыта. Любознателен.`,
@@ -775,31 +790,35 @@
     };
 
     function updateTriangle(num9, num10) {
-      const v9Elem  = document.getElementById('tri9Value');
-      const motElem = document.getElementById('tri9Motivation');
-      const v10Elem = document.getElementById('tri10Value');
-      const actElem = document.getElementById('tri10Action');
-      const advElem = document.getElementById('tri10Advice');
+      const v9Elem   = document.getElementById('tri9Value');
+      const motElem  = document.getElementById('tri9Motivation');
+      const adv9Elem = document.getElementById('tri9Advice');
+      const v10Elem  = document.getElementById('tri10Value');
+      const actElem  = document.getElementById('tri10Action');
+      const advElem  = document.getElementById('tri10Advice');
 
-      // Позиция 9 — мотивация
+      // Позиция 9 — мотивация + рекомендация
       if (num9 === 0) {
-        v9Elem.textContent  = "0";
-        motElem.textContent = "Значение отсутствует (0). Мотивация не проявлена.";
+        v9Elem.textContent   = "0";
+        motElem.textContent  = "Значение отсутствует (0). Мотивация не проявлена.";
+        adv9Elem.textContent = "";
       } else {
         v9Elem.textContent = num9;
         const desc9 = triangleDescriptions[num9];
-        if (desc9 && desc9.motivation) {
-          motElem.textContent = desc9.motivation;
+        if (desc9) {
+          motElem.textContent  = desc9.motivation || "Для этого значения пока нет описания мотивации.";
+          adv9Elem.textContent = desc9.advice     || "Для этого значения пока нет рекомендации.";
         } else {
-          motElem.textContent = "Для этого значения пока нет описания мотивации.";
+          motElem.textContent  = "Для этого значения пока нет описания мотивации.";
+          adv9Elem.textContent = "";
         }
       }
 
       // Позиция 10 — способ действия и рекомендация
       if (num10 === 0) {
-        v10Elem.textContent  = "0";
-        actElem.textContent  = "Значение отсутствует (0). Способ действия не проявлен.";
-        advElem.textContent  = "";
+        v10Elem.textContent = "0";
+        actElem.textContent = "Значение отсутствует (0). Способ действия не проявлен.";
+        advElem.textContent = "";
       } else {
         v10Elem.textContent = num10;
         const desc10 = triangleDescriptions[num10];
@@ -813,7 +832,7 @@
       }
     }
 
-    // Список пар и их описаний (порядок в паре не важен)
+    /* Пары 5–6 и 7–8 */
     const pairMeanings = [
       { pair: [1, 21], text: "Мастер учиться обучая." },
       { pair: [2, 20], text: "Управлять. Понимать закон, создавать свои законы для управления." },
@@ -852,28 +871,18 @@
       // Пара 5–6
       pair56ValuesElem.textContent = `${a5} и ${b5}`;
       const meaning56 = findPairMeaning(a5, b5);
-      if (meaning56) {
-        pair56TextElem.textContent = meaning56;
-      } else {
-        pair56TextElem.textContent = "Для этой пары пока нет заданного описания. Трактуется индивидуально.";
-      }
+      pair56TextElem.textContent = meaning56 || "Для этой пары пока нет заданного описания. Трактуется индивидуально.";
 
       // Пара 7–8
       pair78ValuesElem.textContent = `${c5} и ${d5}`;
       const meaning78 = findPairMeaning(c5, d5);
-      if (meaning78) {
-        pair78TextElem.textContent = meaning78;
-      } else {
-        pair78TextElem.textContent = "Для этой пары пока нет заданного описания. Трактуется индивидуально.";
-      }
+      pair78TextElem.textContent = meaning78 || "Для этой пары пока нет заданного описания. Трактуется индивидуально.";
     }
 
     function recalc() {
       const a3 = toNumber(document.getElementById('a3').value);
       const b3 = toNumber(document.getElementById('b3').value);
       const c3 = toNumber(document.getElementById('c3').value);
-
-      // --- формулы как в Excel ---
 
       // D3 = IF(A3+B3+C3=0,0,MOD(A3+B3+C3-1,22)+1)
       const sumABC = a3 + b3 + c3;
@@ -911,24 +920,24 @@
       const sumA3C3A9 = a3 + c3 + a9;
       const a11 = (sumA3C3A9 === 0) ? 0 : (((sumA3C3A9 - 1) % 22) + 1);
 
-      // --- выводим в номера 4–12 ---
-      document.getElementById('num4').textContent  = d3;   // 4 = D3
-      document.getElementById('num5').textContent  = a5;   // 5 = A5
-      document.getElementById('num6').textContent  = b5;   // 6 = B5
-      document.getElementById('num7').textContent  = c5;   // 7 = C5
-      document.getElementById('num8').textContent  = d5;   // 8 = D5
-      document.getElementById('num9').textContent  = a7;   // 9 = A7
-      document.getElementById('num10').textContent = a9;   // 10 = A9
-      document.getElementById('num11').textContent = e8;   // 11 = E8
-      document.getElementById('num12').textContent = a11;  // 12 = A11
+      // Вывод значений 4–12
+      document.getElementById('num4').textContent  = d3;
+      document.getElementById('num5').textContent  = a5;
+      document.getElementById('num6').textContent  = b5;
+      document.getElementById('num7').textContent  = c5;
+      document.getElementById('num8').textContent  = d5;
+      document.getElementById('num9').textContent  = a7;
+      document.getElementById('num10').textContent = a9;
+      document.getElementById('num11').textContent = e8;
+      document.getElementById('num12').textContent = a11;
 
-      // Обновляем описания I блока (1,2,3,11)
+      // Описания I блока
       updateNumberDescriptions(a3, b3, c3, e8);
 
-      // Обновляем описание III–IV блока (9 и 10)
+      // III–IV блок (9 и 10)
       updateTriangle(a7, a9);
 
-      // Обновляем интерпретации пар 5–6 и 7–8
+      // Пары 5–6 и 7–8
       updatePairs(a5, b5, c5, d5);
     }
 
